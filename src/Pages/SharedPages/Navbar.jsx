@@ -1,15 +1,33 @@
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.svg";
+import { useContext } from "react";
+import { AuthContext } from "../../Providers/AuthProviders";
 
 const Navbar = () => {
+  const { user, logOut } = useContext(AuthContext);
+
+  const handleLogOut = () => {
+    logOut()
+      .then(() => {})
+      .catch((error) => console.log(error));
+  };
+
   const navItems = (
     <>
       <li>
-        <Link to='/'>Home</Link>
-        <Link to='/about'>About</Link>
-        <Link to='/services'>Services</Link>
-        <Link to='/blog'>Blog</Link>
-        <Link to='/contact'>Contact</Link>
+        <Link to="/">Home</Link>
+        <Link to="/about">About</Link>
+        <Link to="/services">Services</Link>
+        <Link to="/blog">Blog</Link>
+        <Link to="/contact">Contact</Link>
+        {user?.email ? (
+          <>
+          <Link to="/bookings">My Bookings</Link>
+          <Link onClick={handleLogOut}>Log Out</Link>
+          </>
+        ) : (
+          <Link to="/login">Login</Link>
+        )}
       </li>
     </>
   );
@@ -46,12 +64,12 @@ const Navbar = () => {
         </Link>
       </div>
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">
-            {navItems}
-        </ul>
+        <ul className="menu menu-horizontal px-1">{navItems}</ul>
       </div>
       <div className="navbar-end">
-      <button className="btn btn-outline text-[#FF3811] hover:bg-[#FF3811] hover:text-[#444444]">Appointment</button>
+        <button className="btn btn-outline text-[#FF3811] hover:bg-[#FF3811] hover:text-[#444444]">
+          Appointment
+        </button>
       </div>
     </div>
   );
